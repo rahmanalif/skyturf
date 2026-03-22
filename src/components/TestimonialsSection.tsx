@@ -1,72 +1,86 @@
 import React from 'react';
 import { Star } from 'lucide-react';
-import BorderGlow from './BorderGlow';
-export function TestimonialsSection() {
-  const testimonials = [
+
+const testimonials = [
   {
     name: 'Mahmudur Rahman',
-    role: 'Amateur Bombsquad Player',
+    role: 'Weekend Team Organizer',
     quote:
-    'The turf quality is unmatched in the city. The floodlights make night games feel like professional matches. Highly recommend!',
-    rating: 5
+      'The lighting changes everything. Night matches actually feel serious here, and booking a slot is fast enough that our group keeps coming back.',
   },
   {
     name: 'Farizul Tanzil',
-    role: 'Amateur Bombsquad Player',
+    role: 'Regular 7v7 Player',
     quote:
-    'Booking is seamless, and the facilities are always spotless. The secure parking is a huge plus for our late-night games.',
-    rating: 5
+      'Most turfs look fine online and feel average in person. Sky Turf actually carries that premium look through the whole experience.',
   },
   {
     name: 'Scamseam',
-    role: 'Amateur Bombsquad Player',
+    role: 'Corporate Match Coordinator',
     quote:
-    'We host our weekly corporate matches here. The staff is friendly, and the changing rooms are top-notch. Best turf around.',
-    rating: 5
-  }];
+      'For late-night fixtures, this is the easiest place to organize. Parking, lighting, and support spaces are all handled properly.',
+  },
+];
 
+export function TestimonialsSection() {
   return (
-    <section className="py-24 bg-dark-surface relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bebas text-white mb-4">
-            Player Reviews
-          </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Don't just take our word for it. Hear from the players who call Sky
-            Turf their home ground.
-          </p>
-        </div>
+    <section className="relative overflow-hidden border-t border-white/6 bg-[#080908] py-24 sm:py-32">
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(57,255,20,0.04),transparent_20%),radial-gradient(circle_at_75%_18%,rgba(57,255,20,0.08),transparent_22%)]" />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) =>
-          <BorderGlow
-            key={index}
-            className="h-full"
-            backgroundColor="#0a0a0a"
-            borderRadius={24}
-            glowRadius={24}
-            glowColor="120 100 60"
-            colors={['#39ff14', '#22c55e', '#38bdf8']}
-            fillOpacity={0.18}>
-            <div className="flex h-full flex-col border border-white/5 bg-dark p-8">
-              <div className="flex gap-1 mb-6">
-                {[...Array(testimonial.rating)].map((_, i) =>
-              <Star key={i} className="w-5 h-5 fill-brand text-brand" />
-              )}
-              </div>
-              <p className="text-gray-300 italic mb-8 flex-grow">
-                "{testimonial.quote}"
-              </p>
-              <div>
-                <h4 className="text-white font-bold">{testimonial.name}</h4>
-                <p className="text-brand text-sm">{testimonial.role}</p>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+          <div className="max-w-md">
+            <div className="text-[11px] uppercase tracking-[0.38em] text-brand">Player verdict</div>
+            <h2 className="mt-4 text-[3.1rem] uppercase leading-[0.9] text-white sm:text-[4.2rem]">
+              Trusted by
+              <br />
+              <span className="text-brand">Teams Who Care</span>
+            </h2>
+            <p className="mt-6 text-base leading-7 text-[#a6b2a2]">
+              The best signal is repeat booking. These are the players and organizers who judge
+              the pitch after kickoff, not just from the photos.
+            </p>
+
+            <div className="mt-10 rounded-[2rem] border border-white/8 bg-white/[0.03] p-6">
+              <div className="text-[10px] uppercase tracking-[0.32em] text-gray-500">Matchday standard</div>
+              <div className="mt-3 font-bebas text-[2.5rem] uppercase leading-[0.92] tracking-[0.12em] text-white">
+                Premium enough for content. Gritty enough for competition.
               </div>
             </div>
-          </BorderGlow>
-          )}
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {testimonials.map((testimonial, index) => (
+              <article
+                key={testimonial.name}
+                className={`flex h-full flex-col justify-between rounded-[2rem] border p-6 ${
+                  index === 1
+                    ? 'border-brand/25 bg-[linear-gradient(180deg,rgba(57,255,20,0.1),rgba(57,255,20,0.03))]'
+                    : 'border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))]'
+                }`}
+              >
+                <div>
+                  <div className="mb-6 flex gap-1 text-brand">
+                    {Array.from({ length: 5 }).map((_, starIndex) => (
+                      <Star key={starIndex} className="h-4 w-4 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-sm leading-7 text-[#dde5d9]">&ldquo;{testimonial.quote}&rdquo;</p>
+                </div>
+
+                <div className="mt-10 border-t border-white/8 pt-5">
+                  <div className="font-bebas text-[1.7rem] uppercase tracking-[0.1em] text-white">
+                    {testimonial.name}
+                  </div>
+                  <div className="text-[11px] uppercase tracking-[0.24em] text-gray-500">
+                    {testimonial.role}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }

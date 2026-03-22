@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Bebas+Neue&display=swap');
 
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
@@ -7,9 +7,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
-    --background: 0 0% 4%; /* #0a0a0a */
+    --background: 0 0% 4%;
     --foreground: 0 0% 100%;
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 60%;
@@ -17,9 +18,9 @@
     --popover-foreground: 0 0% 100%;
     --border: 0 0% 15%;
     --input: 0 0% 15%;
-    --card: 0 0% 10%; /* #1a1a1a */
+    --card: 0 0% 10%;
     --card-foreground: 0 0% 100%;
-    --primary: 110 100% 54%; /* #39FF14 */
+    --primary: 110 100% 54%;
     --primary-foreground: 0 0% 0%;
     --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 100%;
@@ -29,25 +30,58 @@
     --destructive-foreground: 210 40% 98%;
     --ring: 110 100% 54%;
     --radius: 0.5rem;
+    --surface-1: #070807;
+    --surface-2: #0d110d;
+    --surface-3: #131913;
+    --surface-4: #1a2318;
+    --ink-soft: #98a495;
+    --ink-mid: #c6d2c2;
+    --line: rgba(255, 255, 255, 0.08);
+    --line-strong: rgba(255, 255, 255, 0.16);
+    --neon: #39ff14;
+    --neon-soft: rgba(57, 255, 20, 0.22);
+    --shadow-green: rgba(37, 255, 18, 0.25);
   }
-}
-@layer base {
+
   * {
     @apply border-border;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-dark text-gray-300 antialiased;
+    background:
+      radial-gradient(circle at top, rgba(57, 255, 20, 0.08), transparent 28%),
+      linear-gradient(180deg, #050605 0%, #090b09 48%, #050605 100%);
+    color: var(--ink-mid);
+    font-family: 'Archivo', sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+    min-height: 100vh;
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  ::selection {
+    background: rgba(57, 255, 20, 0.85);
+    color: #030503;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-bebas text-white tracking-wide;
   }
-}
-/* Custom utility for the grid background */
-.bg-grid {
-  background-image: linear-gradient(to right, rgba(57, 255, 20, 0.05) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(57, 255, 20, 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
 }
 
 @keyframes sky-hero-float {
@@ -65,11 +99,27 @@
 }
 
 @keyframes sky-hero-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 rgba(57, 255, 20, 0.2), 0 0 20px rgba(57, 255, 20, 0.26);
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(57, 255, 20, 0.18), 0 0 18px rgba(57, 255, 20, 0.18);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(57, 255, 20, 0.06), 0 0 34px rgba(57, 255, 20, 0.45);
+    box-shadow: 0 0 0 7px rgba(57, 255, 20, 0.06), 0 0 38px rgba(57, 255, 20, 0.32);
+  }
+}
+
+@keyframes stadium-scan {
+  0% {
+    transform: translate3d(-15%, 0, 0);
+    opacity: 0;
+  }
+  20%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(15%, 0, 0);
+    opacity: 0;
   }
 }
 
@@ -82,4 +132,60 @@
 
 .sky-hero-cta {
   animation: sky-hero-pulse 2.8s ease-in-out infinite;
+}
+
+.stadium-grid {
+  background-image:
+    linear-gradient(to right, rgba(57, 255, 20, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(57, 255, 20, 0.08) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+.field-lines {
+  position: relative;
+}
+
+.field-lines::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(57, 255, 20, 0.18);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.field-lines::after {
+  content: '';
+  position: absolute;
+  inset: 14% 10%;
+  border: 1px solid rgba(57, 255, 20, 0.14);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.stadium-scan::after {
+  content: '';
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.85), transparent);
+  filter: blur(0.4px);
+  animation: stadium-scan 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -1,125 +1,106 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-export function Navbar({
-  onNavigate
 
+type Page = 'home' | 'booking' | 'pricing' | 'gallery' | 'about' | 'contact';
 
-
-
-}: {onNavigate?: (page: 'home' | 'booking' | 'pricing' | 'gallery' | 'about' | 'contact') => void;}) {
+export function Navbar({ onNavigate }: { onNavigate?: (page: Page) => void }) {
   const [isOpen, setIsOpen] = useState(false);
+
   const handleNavClick = (
-  e: React.MouseEvent<HTMLAnchorElement>,
-  href: string,
-  page?: 'home' | 'booking' | 'pricing' | 'gallery' | 'about' | 'contact') =>
-  {
-    if (page && onNavigate) {
-      e.preventDefault();
-      onNavigate(page);
-      setIsOpen(false);
-    }
+    event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+    page: Page,
+  ) => {
+    event.preventDefault();
+    onNavigate?.(page);
+    setIsOpen(false);
   };
-  const navLinks = [
-  {
-    name: 'Home',
-    href: '#',
-    page: 'home' as const
-  },
-  {
-    name: 'Book',
-    href: '#book',
-    page: 'booking' as const
-  },
-  {
-    name: 'Pricing',
-    href: '#pricing',
-    page: 'pricing' as const
-  },
-  {
-    name: 'Gallery',
-    href: '#gallery',
-    page: 'gallery' as const
-  },
-  {
-    name: 'About',
-    href: '#about',
-    page: 'about' as const
-  },
-  {
-    name: 'Contact',
-    href: '#contact',
-    page: 'contact' as const
-  }];
+
+  const navLinks: { name: string; page: Page }[] = [
+    { name: 'Home', page: 'home' },
+    { name: 'Book', page: 'booking' },
+    { name: 'Pricing', page: 'pricing' },
+    { name: 'Gallery', page: 'gallery' },
+    { name: 'About', page: 'about' },
+    { name: 'Contact', page: 'contact' },
+  ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md border-b border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6">
+      <div className="mx-auto max-w-7xl rounded-[26px] border border-white/10 bg-black/65 px-4 backdrop-blur-xl shadow-[0_16px_60px_rgba(0,0,0,0.35)] sm:px-6">
         <div className="flex h-20 items-center justify-between gap-4">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <a
-              href="#"
-              onClick={(e) => handleNavClick(e, '#', 'home')}
-              className="inline-flex items-center gap-3">
-              <img
-                className="h-10 w-auto object-contain sm:h-28"
-                src="/skyturf_logo_transparent.png"
-                alt="Sky Turf logo" />
-              
-            </a>
-          </div>
+          <a
+            href="#"
+            onClick={(event) => handleNavClick(event, 'home')}
+            className="inline-flex items-center gap-3"
+          >
+            <span className="rounded-full border border-brand/30 bg-brand/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.38em] text-brand">
+              Dhaka Matchday
+            </span>
+            <div className="hidden sm:block">
+              <div className="font-bebas text-[2rem] uppercase leading-none tracking-[0.18em] text-white">
+                Sky Turf
+              </div>
+              <div className="text-[11px] uppercase tracking-[0.3em] text-gray-500">
+                Under the lights
+              </div>
+            </div>
+          </a>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:block">
-            <div className="flex items-baseline space-x-8 lg:space-x-10">
-              {navLinks.map((link) =>
+          <div className="hidden items-center gap-1 md:flex">
+            {navLinks.map((link) => (
               <a
                 key={link.name}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href, link.page)}
-                className="text-white hover:text-brand px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                
-                  {link.name}
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="flex items-center justify-self-end md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-dark-surface focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand"
-              aria-expanded="false">
-              
-              <span className="sr-only">Open main menu</span>
-              {isOpen ?
-              <X className="block h-6 w-6" aria-hidden="true" /> :
-
-              <Menu className="block h-6 w-6" aria-hidden="true" />
-              }
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      {isOpen &&
-      <div className="md:hidden bg-dark-surface border-b border-white/10">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navLinks.map((link) =>
-          <a
-            key={link.name}
-            href={link.href}
-            className="text-gray-300 hover:text-brand block px-3 py-2 rounded-md text-base font-medium"
-            onClick={(e) => handleNavClick(e, link.href, link.page)}>
-            
+                href="#"
+                onClick={(event) => handleNavClick(event, link.page)}
+                className="rounded-full px-4 py-2 text-sm font-medium text-gray-300 transition-colors duration-300 hover:text-white"
+              >
                 {link.name}
               </a>
-          )}
+            ))}
           </div>
-        </div>
-      }
-    </nav>);
 
+          <div className="hidden md:block">
+            <button
+              onClick={(event) => handleNavClick(event, 'booking')}
+              className="rounded-full border border-brand/40 bg-brand px-5 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-black transition-transform duration-300 hover:-translate-y-0.5 hover:bg-brand-hover"
+            >
+              Book Now
+            </button>
+          </div>
+
+          <button
+            onClick={() => setIsOpen((value) => !value)}
+            className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-3 text-gray-300 transition-colors hover:text-white md:hidden"
+            aria-expanded={isOpen}
+            aria-label="Toggle navigation"
+          >
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+
+        {isOpen && (
+          <div className="border-t border-white/10 py-4 md:hidden">
+            <div className="grid gap-2">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href="#"
+                  onClick={(event) => handleNavClick(event, link.page)}
+                  className="rounded-2xl border border-white/6 bg-white/[0.03] px-4 py-3 text-sm uppercase tracking-[0.18em] text-gray-300 transition-colors hover:text-white"
+                >
+                  {link.name}
+                </a>
+              ))}
+              <button
+                onClick={(event) => handleNavClick(event, 'booking')}
+                className="mt-2 rounded-2xl bg-brand px-4 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-black"
+              >
+                Book Now
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
 }

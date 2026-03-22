@@ -15,7 +15,7 @@ export function App() {
     'home' | 'booking' | 'pricing' | 'gallery' | 'about' | 'contact'>(
     'home');
   return (
-    <div className="min-h-screen bg-dark text-gray-300 font-sans selection:bg-brand selection:text-black">
+    <div className="min-h-screen bg-dark text-gray-300 selection:bg-brand selection:text-black">
       <Navbar onNavigate={setCurrentPage} />
 
       {currentPage === 'home' &&

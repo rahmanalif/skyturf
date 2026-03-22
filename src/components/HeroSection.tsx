@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { CalendarDays, Clock3 } from 'lucide-react';
-import BorderGlow from './BorderGlow';
+import { ArrowUpRight, CalendarDays, Clock3, MapPin } from 'lucide-react';
 
 type HeroPage = 'booking';
 
@@ -9,27 +8,31 @@ interface HeroSectionProps {
 }
 
 const PARTICLES = [
-  { left: '5%', top: '16%', size: 5, type: 'dot', duration: 9, delay: 0.2 },
-  { left: '12%', top: '62%', size: 10, type: 'ball', duration: 13, delay: 1.1 },
-  { left: '18%', top: '34%', size: 7, type: 'ring', duration: 11, delay: 0.6 },
-  { left: '24%', top: '74%', size: 4, type: 'dot', duration: 12, delay: 1.8 },
-  { left: '31%', top: '21%', size: 8, type: 'ball', duration: 10, delay: 0.9 },
-  { left: '38%', top: '56%', size: 5, type: 'dot', duration: 14, delay: 0.4 },
-  { left: '45%', top: '28%', size: 6, type: 'ring', duration: 9, delay: 1.6 },
-  { left: '52%', top: '67%', size: 4, type: 'dot', duration: 12, delay: 0.7 },
-  { left: '59%', top: '13%', size: 9, type: 'ball', duration: 11, delay: 1.3 },
-  { left: '66%', top: '42%', size: 5, type: 'dot', duration: 10, delay: 0.5 },
-  { left: '72%', top: '77%', size: 8, type: 'ring', duration: 13, delay: 1.9 },
-  { left: '79%', top: '32%', size: 5, type: 'dot', duration: 14, delay: 0.3 },
-  { left: '86%', top: '57%', size: 10, type: 'ball', duration: 9, delay: 1.4 },
-  { left: '92%', top: '20%', size: 4, type: 'dot', duration: 12, delay: 0.8 },
+  { left: '4%', top: '18%', size: 6, type: 'dot', duration: 10, delay: 0.2 },
+  { left: '10%', top: '67%', size: 11, type: 'ball', duration: 13, delay: 1.3 },
+  { left: '20%', top: '35%', size: 7, type: 'ring', duration: 11, delay: 0.6 },
+  { left: '32%', top: '76%', size: 4, type: 'dot', duration: 12, delay: 1.5 },
+  { left: '44%', top: '18%', size: 8, type: 'ball', duration: 9, delay: 0.7 },
+  { left: '52%', top: '58%', size: 5, type: 'dot', duration: 14, delay: 0.4 },
+  { left: '63%', top: '24%', size: 8, type: 'ring', duration: 10, delay: 1.1 },
+  { left: '71%', top: '74%', size: 5, type: 'dot', duration: 13, delay: 1.7 },
+  { left: '84%', top: '52%', size: 10, type: 'ball', duration: 10, delay: 0.9 },
+  { left: '92%', top: '20%', size: 4, type: 'dot', duration: 12, delay: 0.5 },
+];
+
+const MATCH_NIGHTS = ['06 PM PRIME', '08 PM FAST BOOKING', '10 PM UNDER LIGHTS'];
+
+const QUICK_FACTS = [
+  { value: '7v7', label: 'match format' },
+  { value: 'LED', label: 'stadium floodlights' },
+  { value: '24/7', label: 'slot management' },
 ];
 
 export function HeroSection({ onNavigate }: HeroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
-  const particlesLayerRef = useRef<HTMLDivElement>(null);
-  const textLayerRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<HTMLImageElement>(null);
+  const copyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -38,56 +41,50 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
       return;
     }
 
-    let rafId = 0;
+    let frame = 0;
 
     const updateParallax = () => {
-      rafId = 0;
-
+      frame = 0;
       const rect = section.getBoundingClientRect();
-      const heroHeight = Math.max(section.offsetHeight, window.innerHeight);
-      const progress = Math.min(Math.max(-rect.top / heroHeight, 0), 1.2);
+      const height = Math.max(section.offsetHeight, window.innerHeight);
+      const progress = Math.min(Math.max(-rect.top / height, 0), 1.1);
       const isMobile = window.innerWidth < 768;
-      const backgroundShift = progress * (isMobile ? 5 : 10);
-      const particlesShift = progress * (isMobile ? 10 : 22);
-      const textShift = progress * (isMobile ? 12 : 28);
-      const fadeProgress = Math.min(Math.max((progress - 0.8) / 0.2, 0), 1);
-      const opacity = 1 - fadeProgress;
+      const bgShift = progress * (isMobile ? 4 : 10);
+      const playerShift = progress * (isMobile ? 8 : 18);
+      const copyShift = progress * (isMobile ? 5 : 12);
 
       if (backgroundRef.current) {
-        backgroundRef.current.style.transform = `translate3d(0, -${backgroundShift}vh, 0) scale(1.08)`;
+        backgroundRef.current.style.transform = `translate3d(0, -${bgShift}vh, 0) scale(1.06)`;
       }
 
-      if (particlesLayerRef.current) {
-        particlesLayerRef.current.style.transform = `translate3d(0, -${particlesShift}vh, 0)`;
+      if (playerRef.current) {
+        playerRef.current.style.transform = `translate3d(0, -${playerShift}vh, 0)`;
       }
 
-      if (textLayerRef.current) {
-        textLayerRef.current.style.transform = `translate3d(0, -${textShift}vh, 0)`;
+      if (copyRef.current) {
+        copyRef.current.style.transform = `translate3d(0, -${copyShift}vh, 0)`;
       }
-
-      section.style.opacity = `${opacity}`;
-      section.style.filter = `blur(${fadeProgress * 6}px)`;
     };
 
-    const requestUpdate = () => {
-      if (rafId !== 0) {
+    const requestFrame = () => {
+      if (frame !== 0) {
         return;
       }
 
-      rafId = window.requestAnimationFrame(updateParallax);
+      frame = window.requestAnimationFrame(updateParallax);
     };
 
     updateParallax();
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-    window.addEventListener('resize', requestUpdate);
+    window.addEventListener('scroll', requestFrame, { passive: true });
+    window.addEventListener('resize', requestFrame);
 
     return () => {
-      if (rafId !== 0) {
-        window.cancelAnimationFrame(rafId);
+      if (frame !== 0) {
+        window.cancelAnimationFrame(frame);
       }
 
-      window.removeEventListener('scroll', requestUpdate);
-      window.removeEventListener('resize', requestUpdate);
+      window.removeEventListener('scroll', requestFrame);
+      window.removeEventListener('resize', requestFrame);
     };
   }, []);
 
@@ -95,25 +92,24 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
     <section
       id="home"
       ref={sectionRef}
-      className="relative flex h-screen items-center overflow-hidden bg-[#0a0a0a] pt-20 transition-[opacity,filter] duration-300">
-      <div className="absolute inset-0 bg-[#020403]" />
-
+      className="relative min-h-screen overflow-hidden px-4 pb-10 pt-28 sm:px-6 lg:px-8"
+    >
+      <div className="absolute inset-0 bg-[#040504]" />
       <div
         ref={backgroundRef}
         className="absolute inset-[-8%]"
         style={{
           background:
-            'linear-gradient(180deg, rgba(2,6,4,0.28) 0%, rgba(2,6,4,0.5) 42%, rgba(2,6,4,0.86) 100%), radial-gradient(circle at 50% 18%, rgba(57,255,20,0.12), transparent 28%), url("/bgturf.jpg")',
+            'linear-gradient(90deg, rgba(4,5,4,0.94) 0%, rgba(4,5,4,0.86) 40%, rgba(4,5,4,0.68) 72%, rgba(4,5,4,0.92) 100%), radial-gradient(circle at 70% 22%, rgba(57,255,20,0.2), transparent 24%), url("/bgturf.jpg")',
           backgroundPosition: 'center, center, center',
           backgroundSize: 'cover, cover, cover',
         }}
       />
+      <div className="stadium-grid absolute inset-0 opacity-30" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.18),rgba(0,0,0,0.7)),radial-gradient(circle_at_72%_18%,rgba(57,255,20,0.12),transparent_20%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-[36vh] bg-[radial-gradient(ellipse_at_center,rgba(57,255,20,0.18),transparent_65%)] blur-3xl" />
 
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(57,255,20,0.07),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.18),rgba(0,0,0,0.72))]" />
-
-      <div className="absolute inset-x-0 bottom-[7%] h-[28%] bg-[radial-gradient(ellipse_at_center,rgba(57,255,20,0.12),transparent_62%)] blur-3xl" />
-
-      <div ref={particlesLayerRef} className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden">
         {PARTICLES.map((particle, index) => (
           <div
             key={`${particle.left}-${particle.top}`}
@@ -123,24 +119,26 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
               top: particle.top,
               animationDuration: `${particle.duration}s`,
               animationDelay: `${particle.delay}s`,
-              transform: `translate3d(0, 0, 0) scale(${index % 3 === 0 ? 1.1 : 1})`,
-            }}>
+              transform: `translate3d(0, 0, 0) scale(${index % 2 === 0 ? 1 : 1.15})`,
+            }}
+          >
             {particle.type === 'dot' && (
               <span
-                className="block rounded-full bg-brand shadow-[0_0_16px_rgba(57,255,20,0.55)]"
+                className="block rounded-full bg-brand shadow-[0_0_18px_rgba(57,255,20,0.55)]"
                 style={{ width: particle.size, height: particle.size }}
               />
             )}
             {particle.type === 'ring' && (
               <span
-                className="block rounded-full border border-brand/70 shadow-[0_0_16px_rgba(57,255,20,0.38)]"
+                className="block rounded-full border border-brand/70 shadow-[0_0_18px_rgba(57,255,20,0.38)]"
                 style={{ width: particle.size + 4, height: particle.size + 4 }}
               />
             )}
             {particle.type === 'ball' && (
               <span
                 className="flex items-center justify-center rounded-full border border-brand/60 text-[8px] text-brand/90 shadow-[0_0_18px_rgba(57,255,20,0.35)]"
-                style={{ width: particle.size + 6, height: particle.size + 6 }}>
+                style={{ width: particle.size + 6, height: particle.size + 6 }}
+              >
                 +
               </span>
             )}
@@ -148,85 +146,146 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
         ))}
       </div>
 
-      <div
-        ref={textLayerRef}
-        className="relative z-10 mx-auto flex w-full max-w-7xl justify-center px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl text-center">
-          <div className="mb-5 inline-flex items-center rounded-full border border-brand/25 bg-brand/8 px-4 py-2 text-[11px] uppercase tracking-[0.4em] text-brand/80 backdrop-blur-sm">
-            Night Stadium Energy
+      <div className="relative mx-auto grid min-h-[calc(100vh-8rem)] max-w-7xl items-end gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(420px,0.85fr)]">
+        <div ref={copyRef} className="relative z-10 max-w-3xl pt-10 lg:pt-16">
+          <div className="mb-5 inline-flex items-center gap-3 rounded-full border border-brand/30 bg-black/50 px-4 py-2 text-[11px] uppercase tracking-[0.42em] text-brand backdrop-blur-sm">
+            <span className="h-2 w-2 rounded-full bg-brand shadow-[0_0_14px_rgba(57,255,20,0.7)]" />
+            Bangladesh Night Football
           </div>
 
-          <h1 className="text-5xl uppercase leading-[0.9] text-white drop-shadow-[0_0_30px_rgba(0,0,0,0.45)] sm:text-6xl md:text-8xl lg:text-[7rem]">
-            Play Under
+          <div className="mb-6 flex flex-wrap gap-2">
+            {MATCH_NIGHTS.map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-gray-400"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+
+          <h1 className="max-w-4xl text-[4.4rem] uppercase leading-[0.86] text-white drop-shadow-[0_0_30px_rgba(0,0,0,0.38)] sm:text-[5.7rem] lg:text-[8.4rem]">
+            The Turf
             <br />
-            the Sky at <span className="text-brand">Sky Turf</span>
+            That Feels
+            <br />
+            <span className="text-brand">Match Ready</span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-base text-gray-400 sm:text-lg md:text-xl">
-            Book your match anytime, day or night.
+          <p className="mt-6 max-w-xl text-base leading-7 text-[#b7c2b3] sm:text-lg">
+            Built for late kickoffs, fast booking, and teams that want the city&apos;s sharpest
+            football stage. Sky Turf brings pro-light atmosphere to every local fixture.
           </p>
 
-          {/* <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <button
-              className="sky-hero-cta rounded-xl bg-brand px-8 py-4 text-base font-bold text-black transition-transform duration-300 hover:scale-105"
-              onClick={() => onNavigate?.('booking')}>
-              Book Now
+              className="sky-hero-cta inline-flex items-center justify-center gap-2 rounded-full bg-brand px-7 py-4 text-sm font-semibold uppercase tracking-[0.24em] text-black transition-transform duration-300 hover:-translate-y-0.5 hover:bg-brand-hover"
+              onClick={() => onNavigate?.('booking')}
+            >
+              Book a Slot
+              <ArrowUpRight className="h-4 w-4" />
             </button>
             <button
-              className="rounded-xl border border-white/15 bg-white/5 px-8 py-4 text-base font-semibold text-white transition-colors duration-300 hover:border-brand/50 hover:text-brand"
-              onClick={() => onNavigate?.('booking')}>
-              Check Availability
+              className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/[0.03] px-7 py-4 text-sm font-semibold uppercase tracking-[0.24em] text-white transition-colors duration-300 hover:border-brand/30 hover:text-brand"
+              onClick={() => onNavigate?.('booking')}
+            >
+              Check Tonight&apos;s Openings
             </button>
-          </div> */}
+          </div>
 
-          <BorderGlow
-            className="mx-auto mt-12 w-full max-w-5xl"
-            backgroundColor="rgba(23, 23, 23, 0.95)"
-            borderRadius={28}
-            glowRadius={24}
-            glowColor="120 100 60"
-            colors={['#39ff14', '#22c55e', '#38bdf8']}
-            fillOpacity={0.18}>
-            <div className="rounded-[28px] border border-white/10 bg-[#171717]/95 p-6 shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-md">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_1fr_220px] md:items-end">
-                <div className="flex flex-col text-left">
-                  <label className="mb-3 flex items-center gap-2 text-lg text-gray-300">
-                    <CalendarDays className="h-5 w-5 text-brand" />
-                    <span>Date</span>
-                  </label>
-                  <input
-                    type="date"
-                    className="h-14 rounded-xl border border-white/15 bg-[#111111] px-4 text-lg text-white outline-none transition-colors focus:border-brand"
-                  />
+          <div className="mt-12 grid gap-3 sm:grid-cols-3">
+            {QUICK_FACTS.map((fact) => (
+              <div
+                key={fact.label}
+                className="rounded-[1.5rem] border border-white/8 bg-black/35 px-4 py-5 backdrop-blur-sm"
+              >
+                <div className="font-bebas text-3xl uppercase tracking-[0.14em] text-white">
+                  {fact.value}
                 </div>
+                <div className="text-xs uppercase tracking-[0.22em] text-gray-500">{fact.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-                <div className="flex flex-col text-left">
-                  <label className="mb-3 flex items-center gap-2 text-lg text-gray-300">
-                    <Clock3 className="h-5 w-5 text-brand" />
-                    <span>Time Slot</span>
+        <div className="relative z-10 lg:pb-6">
+          <div className="pointer-events-none absolute right-[-5%] top-[-18%] hidden h-[36rem] w-[36rem] rounded-full bg-brand/10 blur-3xl lg:block" />
+
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-5 shadow-[0_28px_90px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+            <div className="field-lines stadium-scan relative overflow-hidden rounded-[1.6rem] border border-white/8 bg-[linear-gradient(180deg,rgba(10,14,10,0.9),rgba(5,7,5,0.96))] px-5 pb-5 pt-6 sm:px-6">
+              <div className="mb-6 flex items-center justify-between">
+                <div>
+                  <div className="text-[11px] uppercase tracking-[0.34em] text-brand">Prime booking panel</div>
+                  <div className="mt-2 font-bebas text-[2rem] uppercase leading-none tracking-[0.14em] text-white">
+                    Lock Tonight&apos;s Pitch
+                  </div>
+                </div>
+                <div className="rounded-full border border-brand/30 bg-brand/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-brand">
+                  Fast confirm
+                </div>
+              </div>
+
+              <div className="grid gap-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="grid gap-2 text-left">
+                    <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-gray-400">
+                      <CalendarDays className="h-4 w-4 text-brand" />
+                      Match Date
+                    </span>
+                    <input
+                      type="date"
+                      className="h-14 rounded-[1.1rem] border border-white/10 bg-black/45 px-4 text-sm uppercase tracking-[0.12em] text-white outline-none transition-colors focus:border-brand"
+                    />
                   </label>
-                  <select className="h-14 rounded-xl border border-white/15 bg-[#111111] px-4 text-lg text-white outline-none transition-colors focus:border-brand">
-                    <option value="">Select a time</option>
-                    <option value="18:00">18:00 - 19:00</option>
-                    <option value="19:00">19:00 - 20:00</option>
-                    <option value="20:00">20:00 - 21:00</option>
-                    <option value="21:00">21:00 - 22:00</option>
-                    <option value="22:00">22:00 - 23:00</option>
-                  </select>
+                  <label className="grid gap-2 text-left">
+                    <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-gray-400">
+                      <Clock3 className="h-4 w-4 text-brand" />
+                      Kickoff Window
+                    </span>
+                    <select className="h-14 rounded-[1.1rem] border border-white/10 bg-black/45 px-4 text-sm uppercase tracking-[0.12em] text-white outline-none transition-colors focus:border-brand">
+                      <option value="">Select a time</option>
+                      <option value="18:00">06:00 PM - 07:00 PM</option>
+                      <option value="19:00">07:00 PM - 08:00 PM</option>
+                      <option value="20:00">08:00 PM - 09:00 PM</option>
+                      <option value="21:00">09:00 PM - 10:00 PM</option>
+                      <option value="22:00">10:00 PM - 11:00 PM</option>
+                    </select>
+                  </label>
                 </div>
 
                 <button
-                  className="h-14 rounded-xl bg-brand px-6 text-lg font-bold text-black transition-transform duration-300 hover:scale-[1.02] hover:bg-brand-hover"
-                  onClick={() => onNavigate?.('booking')}>
+                  className="inline-flex h-14 items-center justify-center rounded-[1.1rem] bg-brand px-6 text-sm font-semibold uppercase tracking-[0.22em] text-black transition-transform duration-300 hover:-translate-y-0.5 hover:bg-brand-hover"
+                  onClick={() => onNavigate?.('booking')}
+                >
                   Check Availability
                 </button>
+
+                <div className="grid gap-3 border-t border-white/8 pt-4 text-left sm:grid-cols-[1fr_auto] sm:items-end">
+                  <div>
+                    <div className="mb-1 text-[10px] uppercase tracking-[0.34em] text-gray-500">Venue pulse</div>
+                    <div className="font-bebas text-[2.2rem] uppercase leading-none tracking-[0.12em] text-white">
+                      Floodlit turf. Clean facilities. Fast turnaround.
+                    </div>
+                  </div>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-gray-300">
+                    <MapPin className="h-4 w-4 text-brand" />
+                    Dhaka, Bangladesh
+                  </div>
+                </div>
               </div>
             </div>
-          </BorderGlow>
+
+            <img
+              ref={playerRef}
+              src="/vini.png"
+              alt="Football player in motion"
+              className="pointer-events-none absolute bottom-0 right-[-4%] hidden h-[34rem] object-contain opacity-95 mix-blend-lighten saturate-125 lg:block"
+            />
+          </div>
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#0a0a0a]" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#050605]" />
     </section>
   );
 }
